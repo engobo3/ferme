@@ -1,0 +1,23 @@
+{
+  "extends": "expo/tsconfig.base",
+  "compilerOptions": {
+    "strict": true,
+    "baseUrl": "../..",
+    "paths": {
+      "@/*": ["./apps/manager-mobile/*"],
+      "@diaspora-trust/core-logic": ["libs/core-logic/src/index.ts"],
+      "@diaspora-trust/core-logic/*": ["libs/core-logic/src/*"],
+      "@diaspora-trust/shared-ui": ["libs/shared-ui/src/index.ts"],
+      "@diaspora-trust/shared-ui/*": ["libs/shared-ui/src/*"]
+    }
+  },
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    ".expo/types/**/*.ts",
+    "expo-env.d.ts",
+    "../../libs/core-logic/src/**/*.ts",
+    "../../libs/shared-ui/src/**/*.ts",
+    "../../libs/shared-ui/src/**/*.tsx"
+  ]
+}

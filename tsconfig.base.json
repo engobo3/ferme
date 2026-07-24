@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "target": "ES2022",
+    "lib": ["ES2022"],
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "isolatedModules": true,
+    "resolveJsonModule": true,
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "composite": false,
+    "baseUrl": ".",
+    "paths": {
+      "@diaspora-trust/core-logic": ["libs/core-logic/src/index.ts"],
+      "@diaspora-trust/core-logic/*": ["libs/core-logic/src/*"],
+      "@diaspora-trust/shared-ui": ["libs/shared-ui/src/index.ts"],
+      "@diaspora-trust/shared-ui/*": ["libs/shared-ui/src/*"]
+    }
+  },
+  "exclude": ["node_modules", "**/node_modules"]
+}

@@ -1,0 +1,10 @@
+{
+  "name": "supplier-web",
+  "sourceRoot": "apps/supplier-web/src",
+  "projectType": "application",
+  "targets": {
+    "dev": { "command": "cd apps/supplier-web && npx vite" },
+    "build": { "command": "cd apps/supplier-web && npx vite build" },
+    "lint": { "command": "cd apps/supplier-web && npx eslint ." }
+  }
+}

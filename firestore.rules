@@ -1,0 +1,199 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper Functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function getUserData() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+    }
+
+    function hasRole(role) {
+      return isAuthenticated() && getUserData().role == role;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+    
+    // Check if the user is assigned to the task
+    function isAssignedToTask(resourceData) {
+      return isAuthenticated() && resourceData.assignedTo == request.auth.uid;
+    }
+
+    // --- Users Collection ---
+    match /users/{userId} {
+      // Users can read/write their own profile
+      allow get, update: if isOwner(userId);
+      // Public profiles allowed for admins
+      allow list: if hasRole('admin');
+      // Users can create their own profile on sign-up (doc ID must match auth UID)
+      allow create: if isOwner(userId) || hasRole('admin');
+      // Only admins can delete users
+      allow delete: if hasRole('admin');
+    }
+
+    // --- Farms Collection ---
+    match /farms/{farmId} {
+      // Everyone can view active farms
+      allow read: if isAuthenticated();
+      
+      // Only Admins or Funders (Investors) can create/edit farms
+      allow write: if hasRole('admin') || hasRole('funder');
+    }
+
+    // --- Tasks Collection ---
+    match /tasks/{taskId} {
+      allow read: if isAuthenticated();
+
+      // Creation: Only Admin/Funder
+      allow create: if hasRole('admin') || hasRole('funder');
+
+      // Update: STRICT State Machine
+      allow update: if 
+        // 1. Admin/Funder Authority (Can do anything, e.g. move to Completed/Rejected)
+        (hasRole('admin') || hasRole('funder')) 
+        || 
+        // 2. Operator (Farmer) Workflow
+        (
+          isAssignedToTask(resource.data) &&
+          
+          // IMMUTABILITY: Cannot change Financials or Due Date
+          request.resource.data.payoutAmount == resource.data.payoutAmount &&
+          request.resource.data.isPaid == resource.data.isPaid &&
+          request.resource.data.dueDate == resource.data.dueDate &&
+
+          // STATE MACHINE:
+          // A. Moving from 'pending' -> 'in_review'
+          //    - Must upload evidence (photoUrl is mandatory if evidence exists)
+          //    - Cannot move to 'completed' directly
+          (
+            (resource.data.status == 'pending' && request.resource.data.status == 'in_review') ||
+            (resource.data.status == 'rejected' && request.resource.data.status == 'in_review')
+          )
+        );
+    }
+
+    // --- Transactions Collection ---
+    match /transactions/{transactionId} {
+      // Users see their own money
+      allow read: if isAuthenticated() && resource.data.userId == request.auth.uid;
+      
+      // Admin sees all
+      allow read: if hasRole('admin');
+
+      // WRITE-ONLY from Backend (Secure Cloud Functions)
+      // No client-side writes allowed.
+      allow write: if false; 
+    }
+
+    // --- Vouchers Collection ---
+    match /vouchers/{voucherId} {
+      // Authenticated users can read vouchers relevant to them
+      allow read: if isAuthenticated();
+      // Only admin/funder can create vouchers
+      allow create: if hasRole('admin') || hasRole('funder');
+      // Write-only from backend for redemptions
+      allow update: if false;
+      allow delete: if false;
+    }
+
+    // --- Voucher Redemptions ---
+    match /voucher_redemptions/{redemptionId} {
+      allow read: if isAuthenticated();
+      allow write: if false; // Backend only
+    }
+
+    // --- Voucher Requests (operator asks funder for a restricted voucher) ---
+    match /voucher_requests/{requestId} {
+      // Requester sees their own; admin/funder review all
+      allow read: if hasRole('admin') || hasRole('funder')
+        || (isAuthenticated() && resource.data.requestedBy == request.auth.uid);
+      // Operators create their own requests, always born pending
+      allow create: if hasRole('operator')
+        && request.resource.data.requestedBy == request.auth.uid
+        && request.resource.data.status == 'pending_approval';
+      // Approval/decision belongs to admin/funder
+      allow update: if hasRole('admin') || hasRole('funder');
+      allow delete: if hasRole('admin');
+    }
+
+    // --- Clock-ins (geofenced attendance) ---
+    match /clock_ins/{clockInId} {
+      allow read: if isAuthenticated();
+      // Workers write their own attendance record; immutable afterwards
+      allow create: if isAuthenticated()
+        && request.resource.data.userId == request.auth.uid;
+      allow update, delete: if false;
+    }
+
+    // --- Supplier Prices ---
+    match /supplier_prices/{priceId} {
+      // Admin and funders can review prices
+      allow read: if hasRole('admin') || hasRole('funder');
+      // Suppliers can read their own submissions
+      allow read: if isAuthenticated() && resource.data.supplierId == request.auth.uid;
+      allow write: if false; // Backend only (via Cloud Function)
+    }
+
+    // --- Price Benchmarks ---
+    match /price_benchmarks/{benchmarkId} {
+      allow read: if isAuthenticated();
+      allow write: if hasRole('admin');
+    }
+
+    // --- Sensor Readings ---
+    match /sensor_readings/{readingId} {
+      allow read: if isAuthenticated();
+      // IoT devices write via backend; no client writes
+      allow write: if false;
+    }
+
+    // --- Sensor Alerts ---
+    match /sensor_alerts/{alertId} {
+      allow read: if isAuthenticated();
+      // Operators can acknowledge alerts
+      allow update: if isAuthenticated() && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['acknowledged']);
+      allow create, delete: if false; // Backend only
+    }
+
+    // --- Poultry Batches ---
+    match /poultry_batches/{batchId} {
+      allow read: if isAuthenticated();
+      allow create: if hasRole('admin') || hasRole('funder');
+      allow update: if isAuthenticated();
+      allow delete: if hasRole('admin');
+    }
+
+    // --- Farm Measurements ---
+    match /farm_measurements/{measurementId} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated();
+      allow update, delete: if hasRole('admin');
+    }
+
+    // --- Payout Locks (internal, backend only) ---
+    match /payout_locks/{lockId} {
+      allow read, write: if false; // Backend only
+    }
+
+    // --- Audit Logs (immutable ledger) ---
+    match /audit_logs/{logId} {
+      // Only admins can read audit trails
+      allow read: if hasRole('admin');
+      // No client-side writes — backend only
+      allow write: if false;
+    }
+
+    // --- Materials (chain of custody) ---
+    match /materials/{materialId} {
+      allow read: if isAuthenticated();
+      // Materials are managed via Cloud Functions
+      allow write: if false;
+    }
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "name": "core-logic",
+  "sourceRoot": "libs/core-logic/src",
+  "projectType": "library",
+  "targets": {
+    "build": { "command": "cd libs/core-logic && npx tsc --project tsconfig.json" },
+    "test": { "command": "cd libs/core-logic && npx vitest run" },
+    "lint": { "command": "cd libs/core-logic && npx eslint src/" }
+  }
+}

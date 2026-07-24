@@ -1,0 +1,33 @@
+{
+  "name": "diaspora-trust",
+  "version": "0.1.0",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "libs/*",
+    "functions"
+  ],
+  "scripts": {
+    "dev:web": "npx nx run investor-web:dev",
+    "dev:mobile": "npx nx run manager-mobile:start",
+    "dev:supplier": "npx nx run supplier-web:dev",
+    "dev:functions": "npx nx run functions:serve",
+    "build:all": "npx nx run-many -t build",
+    "lint:all": "npx nx run-many -t lint",
+    "test:all": "npx nx run-many -t test",
+    "deploy:functions": "npx nx run functions:build && firebase deploy --only functions",
+    "deploy:web": "npx nx run investor-web:build && firebase deploy --only hosting"
+  },
+  "devDependencies": {
+    "@nx/js": "^21.6.10",
+    "expo-router": "~6.0.22",
+    "firebase-admin": "^13.6.1",
+    "nx": "^21.6.10",
+    "tsx": "^4.21.0",
+    "typescript": "~5.9.2"
+  },
+  "overrides": {
+    "react": "19.1.0",
+    "react-dom": "19.1.0"
+  }
+}

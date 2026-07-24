@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "752628531985",
+    "project_id": "ferme-9b64f",
+    "storage_bucket": "ferme-9b64f.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:752628531985:android:cbe23e9dceb54cd7f7c2b0",
+        "android_client_info": {
+          "package_name": "com.farmtrust.manager"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCJ7mKi-iauuBkP2xuGwjD2TIaeMfO4J0Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

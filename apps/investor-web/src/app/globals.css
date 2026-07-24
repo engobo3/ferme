@@ -1,0 +1,68 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+/*
+ * Brand colors — mirrors libs/shared-ui/src/theme/tokens.ts (single source
+ * of truth). Farm vertical = green, construction ("chantier") = amber.
+ */
+@theme {
+  /* Brand / farm vertical */
+  --color-primary: #2E7D32;         /* palette.green700 — colors.primary */
+  --color-primary-dark: #14532D;    /* palette.green900 — colors.primaryPressed */
+  --color-primary-bright: #16A34A;  /* palette.green600 — accents on dark surfaces */
+  --color-primary-soft: #DCFCE7;    /* palette.green100 — colors.farmSoft */
+  --color-primary-faint: #F0FDF4;   /* palette.green50 */
+
+  /* Construction vertical */
+  --color-construction: #B45309;        /* palette.amber700 — colors.construction */
+  --color-construction-strong: #D97706; /* palette.amber600 */
+  --color-construction-soft: #FEF3C7;   /* palette.amber100 — colors.constructionSoft */
+  --color-construction-faint: #FFFBEB;  /* palette.amber50 */
+
+  /* Semantic */
+  --color-success: #047857;      /* colors.success */
+  --color-success-soft: #D1FAE5;
+  --color-warning: #D97706;      /* colors.warning */
+  --color-danger: #B91C1C;       /* colors.danger */
+  --color-danger-soft: #FEE2E2;
+  --color-info: #1D4ED8;         /* colors.info */
+  --color-info-soft: #DBEAFE;
+
+  /* Task status (statusColors in tokens.ts) */
+  --color-status-pending: #B45309;
+  --color-status-pending-soft: #FEF3C7;
+  --color-status-review: #1D4ED8;
+  --color-status-review-soft: #DBEAFE;
+  --color-status-completed: #047857;
+  --color-status-completed-soft: #D1FAE5;
+  --color-status-rejected: #B91C1C;
+  --color-status-rejected-soft: #FEE2E2;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  /* System stack: no font download on low-bandwidth connections, no
+     build-time Google Fonts dependency. */
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    "Noto Sans", Arial, sans-serif;
+  --font-mono: ui-monospace, "Cascadia Mono", "Segoe UI Mono", Menlo, Consolas,
+    monospace;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}

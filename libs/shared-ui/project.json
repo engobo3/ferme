@@ -1,0 +1,8 @@
+{
+  "name": "shared-ui",
+  "sourceRoot": "libs/shared-ui/src",
+  "projectType": "library",
+  "targets": {
+    "lint": { "command": "cd libs/shared-ui && npx eslint src/" }
+  }
+}

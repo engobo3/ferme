@@ -1,0 +1,11 @@
+{
+  "name": "manager-mobile",
+  "sourceRoot": "apps/manager-mobile",
+  "projectType": "application",
+  "targets": {
+    "start": { "command": "cd apps/manager-mobile && npx expo start" },
+    "android": { "command": "cd apps/manager-mobile && npx expo run:android" },
+    "ios": { "command": "cd apps/manager-mobile && npx expo run:ios" },
+    "lint": { "command": "cd apps/manager-mobile && npx expo lint" }
+  }
+}

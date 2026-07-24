@@ -1,0 +1,10 @@
+{
+  "name": "investor-web",
+  "sourceRoot": "apps/investor-web/src",
+  "projectType": "application",
+  "targets": {
+    "dev": { "command": "cd apps/investor-web && npx next dev --port 3000" },
+    "build": { "command": "cd apps/investor-web && npx next build" },
+    "lint": { "command": "cd apps/investor-web && npx next lint" }
+  }
+}

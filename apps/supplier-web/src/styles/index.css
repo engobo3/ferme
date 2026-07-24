@@ -1,0 +1,43 @@
+@import "tailwindcss";
+
+/*
+ * Jetons de design FarmTrust — miroir de libs/shared-ui/src/theme/tokens.ts.
+ * Vertical ferme = vert (marque), vertical chantier = ambre.
+ * Toute nouvelle couleur doit venir d'ici, pas de la palette Tailwind brute.
+ */
+@theme {
+  /* Marque / vertical ferme (palette.green*) */
+  --color-brand-50: #F0FDF4;
+  --color-brand-100: #DCFCE7;
+  --color-brand-600: #16A34A;
+  --color-brand-700: #2E7D32;
+  --color-brand-900: #14532D;
+
+  /* Vertical chantier (palette.amber*) */
+  --color-chantier-50: #FFFBEB;
+  --color-chantier-100: #FEF3C7;
+  --color-chantier-600: #D97706;
+  --color-chantier-700: #B45309;
+
+  /* Sémantique (colors.success / warning / danger / info + fonds doux) */
+  --color-success: #047857;
+  --color-success-soft: #D1FAE5;
+  --color-warning: #B45309;
+  --color-warning-soft: #FEF3C7;
+  --color-danger: #B91C1C;
+  --color-danger-soft: #FEE2E2;
+  --color-info: #1D4ED8;
+  --color-info-soft: #DBEAFE;
+
+  /* Surfaces (colors.background / surface / surfaceMuted / border) */
+  --color-page: #F8FAFC;
+  --color-surface: #FFFFFF;
+  --color-surface-muted: #F1F5F9;
+  --color-line: #E2E8F0;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}

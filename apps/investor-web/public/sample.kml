@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>Master_Plan_v2.kml</name>
+    <Placemark>
+      <name>Farm Boundary</name>
+      <Polygon>
+        <outerBoundaryIs>
+          <LinearRing>
+            <coordinates>
+              2.305,6.369,0
+              2.306,6.369,0
+              2.306,6.370,0
+              2.305,6.370,0
+              2.305,6.369,0
+            </coordinates>
+          </LinearRing>
+        </outerBoundaryIs>
+      </Polygon>
+    </Placemark>
+  </Document>
+</kml>

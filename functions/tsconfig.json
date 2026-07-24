@@ -1,0 +1,18 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "noImplicitReturns": true,
+        "outDir": "lib",
+        "sourceMap": true,
+        "strict": true,
+        "skipLibCheck": true,
+        "target": "ES2022",
+        "esModuleInterop": true,
+        "resolveJsonModule": true,
+        "isolatedModules": true
+    },
+    "compileOnSave": true,
+    "include": [
+        "src"
+    ]
+}
