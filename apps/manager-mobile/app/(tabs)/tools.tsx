@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
+import auth from '@react-native-firebase/auth';
 
 import { colors, spacing, radius, typeScale, MIN_TOUCH_TARGET, t } from '@diaspora-trust/shared-ui';
 
@@ -85,6 +86,11 @@ export default function ToolsScreen() {
             <Ionicons name="chevron-forward" size={20} color={colors.textFaint} />
           </TouchableOpacity>
         ))}
+
+        <TouchableOpacity style={styles.signOut} onPress={() => auth().signOut()}>
+          <Ionicons name="log-out-outline" size={20} color={colors.danger} />
+          <Text style={styles.signOutText}>{t('common.signOut')}</Text>
+        </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>
   );
@@ -146,5 +152,18 @@ const styles = StyleSheet.create({
     fontSize: typeScale.caption,
     color: colors.textMuted,
     marginTop: 2,
+  },
+  signOut: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: spacing.sm,
+    minHeight: MIN_TOUCH_TARGET,
+    marginTop: spacing.lg,
+  },
+  signOutText: {
+    fontSize: typeScale.body,
+    fontWeight: '600',
+    color: colors.danger,
   },
 });

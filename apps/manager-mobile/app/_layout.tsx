@@ -1,9 +1,15 @@
+import '../services/emulator'; // must run before any other Firebase usage
+
 import { DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
+import { useEffect, useState } from 'react';
+import { ActivityIndicator, View } from 'react-native';
+import auth, { type FirebaseAuthTypes } from '@react-native-firebase/auth';
 import 'react-native-reanimated';
 
 import { colors, t } from '@diaspora-trust/shared-ui';
+import { LoginScreen } from '../components/LoginScreen';
 
 export const unstable_settings = {
   anchor: '(tabs)',
@@ -23,6 +29,34 @@ const AppTheme = {
 };
 
 export default function RootLayout() {
+  const [user, setUser] = useState<FirebaseAuthTypes.User | null>(null);
+  const [initializing, setInitializing] = useState(true);
+
+  useEffect(() => {
+    const unsubscribe = auth().onAuthStateChanged((nextUser) => {
+      setUser(nextUser);
+      setInitializing(false);
+    });
+    return unsubscribe;
+  }, []);
+
+  if (initializing) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: colors.background }}>
+        <ActivityIndicator size="large" color={colors.primary} />
+      </View>
+    );
+  }
+
+  if (!user) {
+    return (
+      <ThemeProvider value={AppTheme}>
+        <LoginScreen />
+        <StatusBar style="dark" />
+      </ThemeProvider>
+    );
+  }
+
   return (
     <ThemeProvider value={AppTheme}>
       <Stack
